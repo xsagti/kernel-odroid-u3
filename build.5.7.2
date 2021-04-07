@@ -52,11 +52,15 @@ git reset --hard HEAD; git clean -xdf;
 
 patch -N -pi < /compile/doc/stable/misc.exy/patches/eth-hw-addr-v5.10.patch
 
+####patch -p1 < /compile/doc/stable/misc.exy/patches/eth-hw-addr-v5.10.patch
+
 patch -N -pi < /compile/doc/stable/misc.exy/patches/add-disabled-extra-cpu-clocks-odroid-x.patch
 
 #patch -N -pi < /compile/doc/down/usb-u3-nonplus-EHCI.patch
 
 patch -N -pi < /compile/doc/down/odroid-u3-usb-fix.patch
+
+####patch -p1 < /compile/doc/down/odroid-u3-usb-fix.patch
 
 # fix thermal cpu cooling for the odroid u3 and x2
 
@@ -156,6 +160,8 @@ cp -v ./linux-stable/arch/arm/boot/zImage ./rootfs/boot/zImage-${kver}
 
 cp -v ./linux-stable/arch/arm/boot/dts/exynos4412-odroidu3.dtb ./rootfs/boot/dtb-${kver}
 
+cp -v ./linux-stable/arch/arm/boot/dts/exynos4412-odroidu3noplus.dtb ./rootfs/boot/dtb-${kver}
+
 cp -v ./linux-stable/arch/arm/boot/dts/exynos4412-odroidx2.dtb ./rootfs/boot/dtb-${kver}
 
 cp -v ./linux-stable/System.map ./rootfs/boot/System.map-${kver}
@@ -217,7 +223,6 @@ LABEL $LABEL_KERNEL_VERSION
 EOF
 
 cat > README.odroid-u3.extlinux << EOF
-
 TIMEOUT 30
 DEFAULT linux
 
@@ -238,12 +243,11 @@ LABEL $LABEL_KERNEL_VERSION
 EOF
 
 cat > README.odroid-u3.update << EOF
-
 update-initramfs -c -k ${kver}
 mkimage -A arm -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
 EOF
 
-tar cvzf ../${kver}.tar.gz README.odroid-u3 boot/*-${kver} README.odroid-u3.update README.odroid-u3.extlinux lib/modules/${kver}
+tar cvzf ../${kver}.tar.gz README.odroid-u3  README.odroid-u3.update README.odroid-u3.extlinux boot/*-${kver} lib/modules/${kver}
 
 popd
 
