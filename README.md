@@ -5,6 +5,25 @@ All the merit to _hexdump_, https://github.com/hexdump0815 !
 All the merit to rodolfoap, https://github.com/rodolfoap ! (kernel-odroid-u3).  
 All the merit to ScottE, https://forum.odroid.com/memberlist.php?mode=viewprofile&u=7679 ! (USB u3 v0.2).  
 
+##Base
+
+https://github.com/umiddelb/armhf/wiki/How-To-compile-a-custom-Linux-kernel-for-your-ARM-device#odroid-u3 
+
+##Folders
+
+
+- kernels: kernels builds.  
+- linux-mainline-and-mali-generic-stable-kernel: hexdump0815/linux-mainline-and-mali-generic-stable-kernel.  
+- options: Options adapted for cross-build (hexadumps options for build in VMware)  
+- patches: tested patches  
+
+##Files
+
+- build.*: Builds 'scripts' for kernel (commands used)  
+- dmesg.*: dmesg USB for kernels testes  
+
+#rodolfoap instructions
+
 ## Usage
 
 * Cross-build the kernel on an external machine (do not hesitate to fork and fix issues, the apt command was run on a dirty fs, some dependencies might be missing):
