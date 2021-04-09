@@ -1,0 +1,12 @@
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -2018,6 +2018,9 @@
+ 		struct usb_interface *intf = cp->interface[i];
+ 
+ 		if (intf->dev.of_node &&
++                   /* Fix odroud-u2/u3 USB
++                   From https://lore.kernel.org/lkml/26ff3deb-4b8d-7dd2-2418-d56f6dcea313@samsung.com/ */
++                   of_device_is_compatible(intf->dev.of_node, NULL) &&
+ 		    !of_device_is_available(intf->dev.of_node)) {
+ 			dev_info(&dev->dev, "skipping disabled interface %d\n",
+ 				 intf->cur_altsetting->desc.bInterfaceNumber);

@@ -1,0 +1,12 @@
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 6900eea57526..9ece4affb9d4 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
+ 	struct dwc2_core_params *p = &hsotg->params;
+ 
+ 	p->power_down = 0;
++	p->phy_utmi_width = 8;
+}
+
+static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
