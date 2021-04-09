@@ -5,11 +5,11 @@ All the merit to _hexdump_, https://github.com/hexdump0815 !
 All the merit to rodolfoap, https://github.com/rodolfoap ! (kernel-odroid-u3).  
 All the merit to ScottE, https://forum.odroid.com/memberlist.php?mode=viewprofile&u=7679 ! (USB u3 v0.2).  
 
-##Base
+## Base
 
 https://github.com/umiddelb/armhf/wiki/How-To-compile-a-custom-Linux-kernel-for-your-ARM-device#odroid-u3 
 
-##Folders
+## Folders
 
 
 - kernels: kernels builds.  
@@ -17,12 +17,12 @@ https://github.com/umiddelb/armhf/wiki/How-To-compile-a-custom-Linux-kernel-for-
 - options: Options adapted for cross-build (hexadumps options for build in VMware)  
 - patches: tested patches  
 
-##Files
+## Files
 
 - build.*: Builds 'scripts' for kernel (commands used)  
 - dmesg.*: dmesg USB for kernels testes  
 
-#rodolfoap instructions
+# rodolfoap instructions
 
 ## Usage
 
