@@ -1,3 +1,6 @@
 [submodule "tools"]
 	path = tools
 	url = https://github.com/hexdump0815/linux-mainline-and-mali-on-odroid-u3.git
+[submodule "linux-mainline-and-mali-generic-stable-kernel"]
+	path = linux-mainline-and-mali-generic-stable-kernel
+	url = https://github.com/hexdump0815/linux-mainline-and-mali-generic-stable-kernel
