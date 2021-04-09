@@ -1,9 +1,9 @@
 # kernel-odroid-u3
 Tools to build an Odroid-U3 kernel
 
-All the merit to _hexdump_, https://github.com/hexdump0815 !
-All the merit to rodolfoap, https://github.com/rodolfoap ! (kernel-odroid-u3)
-All the merit to ScottE, https://forum.odroid.com/memberlist.php?mode=viewprofile&u=7679 ! (USB u3 v0.2)
+All the merit to _hexdump_, https://github.com/hexdump0815 !  
+All the merit to rodolfoap, https://github.com/rodolfoap ! (kernel-odroid-u3).  
+All the merit to ScottE, https://forum.odroid.com/memberlist.php?mode=viewprofile&u=7679 ! (USB u3 v0.2).  
 
 ## Usage
 
