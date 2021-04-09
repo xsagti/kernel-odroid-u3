@@ -1,7 +1,6 @@
+5.4.5-stb-exy+ with patch -N -pi < /compile/doc/down/odroid-u3-usb-fix.patch
 
-5.4.5-stb-exy+
-with patch -N -pi < /compile/doc/down/odroid-u3-usb-fix.patch
-
+linux@changeme:~$ dmesg | grep usb
 [    2.552679] s5p-secss 10830000.sss: s5p-sss driver registered
 [    2.553430] usbcore: registered new interface driver usbhid
 [    2.558417] usb 1-2: new high-speed USB device number 2 using exynos-ehci

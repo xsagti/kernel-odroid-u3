@@ -41,14 +41,12 @@ linux@changeme:~$ dmesg | grep usb
 [    4.900808] usb 1-3: New USB device found, idVendor=0424, idProduct=3503, bcdDevice=a1.a0
 [    4.903543] usb 1-3: New USB device strings: Mfr=0, Product=0, SerialNumber=0
 
-
 linux@changeme:~$ dmesg | grep EHCI
 [    3.583604] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
 [    3.586519] ehci-exynos: EHCI Exynos driver
 [    3.601517] exynos-ehci 12580000.ehci: EHCI Host Controller
 [    3.648402] exynos-ehci 12580000.ehci: USB 2.0 started, EHCI 1.00
 [    3.664465] usb usb1: Product: EHCI Host Controller
-
 
 linux@changeme:~$ dmesg | grep ehci
 [    3.583604] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
@@ -63,7 +61,6 @@ linux@changeme:~$ dmesg | grep ehci
 [    4.058448] usb 1-2: new high-speed USB device number 2 using exynos-ehci
 [    4.547934] smsc95xx 1-2:1.0 eth0: register 'smsc95xx' at usb-12580000.ehci-2, smsc95xx USB 2.0 Ethernet, 36:92:30:2b:03:c0
 [    4.698348] usb 1-3: new high-speed USB device number 3 using exynos-ehci
-
 
 linux@changeme:~$ dmesg | grep exynos
 [    0.000000] earlycon: exynos4210 at MMIO 0x13810000 (options '')

@@ -1,0 +1,198 @@
+
+set -x
+
+
+
+# Based on https://github.com/hexdump0815/linux-mainline-and-mali-on-odroid-u3/blob/master/readme.exy
+
+export CROSS_COMPILE=arm-linux-gnueabihf-
+
+export ARCH=arm
+
+export INSTALL_MOD_PATH=$(pwd)/rootfs
+
+export KERNEL_VERSION=5.10.25
+
+export LABEL_KERNEL_VERSION="V51025 v2 hexadump"
+
+mkdir -p rootfs/boot/
+
+sudo apt-get -y install gcc-arm-linux-gnueabihf flex bison libssl-dev libncurses-dev bc tree
+
+git submodule update --recursive --init
+
+git clone --depth 1 --single-branch --branch v$KERNEL_VERSION git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+
+##########################################################################################################
+
+# Working on (git root)/linux-stable/
+
+pushd linux-stable
+
+
+
+# If script is reexecuted, will reapply all patches over a clean base
+
+git reset --hard HEAD; git clean -xdf;
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/eth-hw-addr-v5.10.patch 
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/fix-odroid-x2-usb.patch
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/add-disabled-extra-cpu-clocks-odroid-x.patch
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/exynos4412-mali-complete.patch
+
+cp -r /compile/doc/stable/misc.exy/patches/exynos4412-mali-complete/drivers/gpu/arm drivers/gpu
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/devfreq-turbo-for-mali-gpu-driver-v5.9.patch
+
+patch -p1 < /compile/doc/stable/misc.exy/patches/export-cma-symbols.patch
+
+# add u3noplus dtb for the non plus version to fix reboot for it - has to be redone for each new kernel version
+git checkout -- arch/arm/boot/dts/Makefile
+cp arch/arm/boot/dts/exynos4412-odroidu3.dts arch/arm/boot/dts/exynos4412-odroidu3noplus.dts
+cp arch/arm/boot/dts/exynos4412-odroid-common.dtsi arch/arm/boot/dts/exynos4412-odroid-common-u3noplus.dtsi
+patch -p1 < /compile/doc/stable/misc.exy/patches/reboot-fix-u3noplus-v5.8.patch
+
+
+#######
+## nano drivers/usb/dwc2/params.c
+## p->power_down = 0; <- CHANGE TO 0
+## p->phy_utmi_width = 8;
+##
+
+
+
+
+cp /compile/doc/stable/config.exy .config
+
+
+export ARCH=arm
+make exynos_defconfig
+/compile/doc/stable/misc.exy/options/enable-docker-options-xsagti.sh
+/compile/doc/stable/misc.exy/options/enable-additional-options-xsagti.sh
+
+make oldconfig
+make -j 4 zImage dtbs modules
+cd tools/perf
+make
+cd ../power/cpupower
+make
+cd ../../..
+export kver=`make kernelrelease`
+echo ${kver}
+# remove debug info if there and not wanted
+# find . -type f -name '*.ko' | sudo xargs -n 1 objcopy --strip-unneeded
+make modules_install
+
+
+
+mkdir -p ../rootfs/lib/modules/${kver}/tools
+cp -v tools/perf/perf ../rootfs/lib/modules/${kver}/tools
+cp -v tools/power/cpupower/cpupower ../rootfs/lib/modules/${kver}/tools
+cp -v tools/power/cpupower/libcpupower.so.0.0.1 ../rootfs/lib/modules/${kver}/tools/libcpupower.so.0
+# move away the exynos4412 mali module and tar it separately beforehand
+
+mkdir -p ../rootfs/lib/modules/${kver}/extra
+mv ../rootfs/lib/modules/${kver}/kernel/drivers/gpu/arm/mali/maligpu.ko ../rootfs/lib/modules/${kver}/extra
+rm -rf ../rootfs/lib/modules/${kver}/kernel/drivers/gpu/arm
+
+
+tar cvzf /compile/source/linux-stable/${kver}-mali-exynos4412.tar.gz ../rootfs/lib/modules/${kver}/extra
+
+
+
+rm -rf ../rootfs/lib/modules/${kver}/extra
+# redo the depmod without the mali module
+depmod ${kver}
+# make headers_install INSTALL_HDR_PATH=/usr
+
+
+
+cp -v .config ../rootfs/boot/config-${kver}
+cp -v arch/arm/boot/zImage ../rootfs/boot/zImage-${kver}
+mkdir -p ../rootfs/boot/dtb-${kver}
+cp -v arch/arm/boot/dts/exynos4412-odroidu3.dtb ../rootfs/boot/dtb-${kver}
+cp -v arch/arm/boot/dts/exynos4412-odroidu3noplus.dtb ../rootfs/boot/dtb-${kver}
+cp -v arch/arm/boot/dts/exynos4412-odroidx2.dtb ../rootfs/boot/dtb-${kver}
+cp -v arch/arm/boot/dts/exynos4412-odroidx.dtb ../rootfs/boot/dtb-${kver}
+cp -v System.map ../rootfs/boot/System.map-${kver}
+
+
+popd;
+
+pushd rootfs;
+
+
+mkdir -p boot/extlinux
+
+cat > ./boot/extlinux/extlinux.conf.v${kver}.noplus << EOF
+TIMEOUT 30
+DEFAULT linux
+
+MENU TITLE odroid u3 boot options
+
+LABEL $LABEL_KERNEL_VERSION
+
+      MENU LABEL $LABEL_KERNEL_VERSION kernel mmcblk0
+
+      LINUX ../zImage-${kver}
+
+# odroid u3
+#      FDT ../dtb-${kver}/exynos4412-odroidu3.dtb
+
+# odroid u3noplus
+      FDT ../dtb-${kver}/exynos4412-odroidu3noplus.dtb
+#      APPEND earlycon console=ttySAC1,115200n8 console=tty1 mem=2047M smsc95xx.macaddr=ba:5d:6d:41:68:6f root=PARTUUID=7798e841-03 ro loglevel=8 rootwait net.ifnames=0 ipv6.disable=1 fsck.repair=yes drm.edid_firmware=edid/1024x768.bin video=HDMI-A-1:e
+      APPEND earlycon console=ttySAC1,115200n8 console=tty1 mem=2047M smsc95xx.macaddr=ba:5d:6d:41:68:6f root=PARTUUID=7798e841-03 ro loglevel=8 rootwait net.ifnames=0 ipv6.disable=1 fsck.repair=yes video=HDMI-A-1:e
+EOF
+
+cat > ./boot/extlinux/extlinux.conf.v${kver}.plus << EOF
+TIMEOUT 30
+DEFAULT linux
+
+MENU TITLE odroid u3 boot options
+
+LABEL $LABEL_KERNEL_VERSION
+
+      MENU LABEL $LABEL_KERNEL_VERSION kernel mmcblk0
+
+      LINUX ../zImage-${kver}
+
+# odroid u3
+      FDT ../dtb-${kver}/exynos4412-odroidu3.dtb
+
+# odroid u3noplus
+#      FDT ../dtb-${kver}/exynos4412-odroidu3noplus.dtb
+#      APPEND earlycon console=ttySAC1,115200n8 console=tty1 mem=2047M smsc95xx.macaddr=ba:5d:6d:41:68:6f root=PARTUUID=7798e841-03 ro loglevel=8 rootwait net.ifnames=0 ipv6.disable=1 fsck.repair=yes drm.edid_firmware=edid/1024x768.bin video=HDMI-A-1:e
+      APPEND earlycon console=ttySAC1,115200n8 console=tty1 mem=2047M smsc95xx.macaddr=ba:5d:6d:41:68:6f root=PARTUUID=7798e841-03 ro loglevel=8 rootwait net.ifnames=0 ipv6.disable=1 fsck.repair=yes video=HDMI-A-1:e
+EOF
+
+cat > README.odroid-u3.v${kver}.update << EOF
+update-initramfs -c -k ${kver}
+mkimage -A arm -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
+EOF
+
+
+
+
+tar cvzf ../${kver}.tar.gz README.odroid-u3.v${kver}.update boot/*-${kver} boot/extlinux/extlinux.conf.v${kver}.* lib/modules/${kver}
+
+popd
+rm 
+tree -L 5 rootfs/
+
+cd /boot
+update-initramfs -c -k ${kver}
+#mkimage -A arm -O linux -T ramdisk -a 0x0 -e 0x0 -n initrd.img-${kver} -d initrd.img-${kver} uInitrd-${kver}
+tar cvzf /compile/source/linux-stable/${kver}.tar.gz /boot/*-${kver} /lib/modules/${kver}
+cp -v /compile/doc/stable/config.exy /compile/doc/stable/config.exy.old
+cp -v /compile/source/linux-stable/.config /compile/doc/stable/config.exy
+cp -v /compile/source/linux-stable/.config /compile/doc/stable/config.exy-${kver}
+cp -v /compile/source/linux-stable/*.tar.gz /compile/result/stable
+
+
+
+
+

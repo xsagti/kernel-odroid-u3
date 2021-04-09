@@ -1,4 +1,3 @@
-
 5.4.58-stb-exy+. ORIGINAL IMG
 
 linux@changeme:~$ dmesg | grep usb
@@ -35,7 +34,6 @@ linux@changeme:~$ dmesg | grep usb
 [    3.910747] usb 1-3: New USB device found, idVendor=0424, idProduct=3503, bcdDevice=a1.a0
 [    3.913323] usb 1-3: New USB device strings: Mfr=0, Product=0, SerialNumber=0
 
-
 linux@changeme:~$ dmesg | grep EHCI
 [    2.733141] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
 [    2.738761] ehci-exynos: EHCI EXYNOS driver
@@ -55,7 +53,6 @@ linux@changeme:~$ dmesg | grep ehci
 [    3.190152] usb 1-2: new high-speed USB device number 2 using exynos-ehci
 [    3.535454] smsc95xx 1-2:1.0 eth0: register 'smsc95xx' at usb-12580000.ehci-2, smsc95xx USB 2.0 Ethernet, ba:5d:6d:41:68:6f
 [    3.690297] usb 1-3: new high-speed USB device number 3 using exynos-ehci
-
 
 linux@changeme:~$ dmesg | grep exynos
 [    0.000000] earlycon: exynos4210 at MMIO 0x13810000 (options '')
