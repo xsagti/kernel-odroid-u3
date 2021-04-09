@@ -1,0 +1,86 @@
+diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+index 8e3bab1e0c1f..3a29a1a8519c 100644
+--- a/drivers/usb/host/ehci-exynos.c
++++ b/drivers/usb/host/ehci-exynos.c
+@@ -39,6 +39,7 @@  static struct hc_driver __read_mostly exynos_ehci_hc_driver;
+ 
+ struct exynos_ehci_hcd {
+ 	struct clk *clk;
++	struct device_node *of_node;
+ 	struct phy *phy[PHY_NUMBER];
+ };
+ 
+@@ -203,6 +204,13 @@  static int exynos_ehci_probe(struct platform_device *pdev)
+ 	ehci = hcd_to_ehci(hcd);
+ 	ehci->caps = hcd->regs;
+ 
++	/*
++	 * Workaround: reset of_node pointer to avoid conflict between Exynos
++	 * EHCI port subnodes and generic USB device bindings
++	 */
++	exynos_ehci->of_node = pdev->dev.of_node;
++	pdev->dev.of_node = NULL;
++
+ 	/* DMA burst Enable */
+ 	writel(EHCI_INSNREG00_ENABLE_DMA_BURST, EHCI_INSNREG00(hcd->regs));
+ 
+@@ -219,6 +227,7 @@  static int exynos_ehci_probe(struct platform_device *pdev)
+ 
+ fail_add_hcd:
+ 	exynos_ehci_phy_disable(&pdev->dev);
++	pdev->dev.of_node = exynos_ehci->of_node;
+ fail_io:
+ 	clk_disable_unprepare(exynos_ehci->clk);
+ fail_clk:
+@@ -231,6 +240,8 @@  static int exynos_ehci_remove(struct platform_device *pdev)
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct exynos_ehci_hcd *exynos_ehci = to_exynos_ehci(hcd);
+ 
++	pdev->dev.of_node = exynos_ehci->of_node;
++
+ 	usb_remove_hcd(hcd);
+ 
+ 	exynos_ehci_phy_disable(&pdev->dev);
+diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+index c0c4dcca6f3c..905c6317e0c3 100644
+--- a/drivers/usb/host/ohci-exynos.c
++++ b/drivers/usb/host/ohci-exynos.c
+@@ -30,6 +30,7 @@  static struct hc_driver __read_mostly exynos_ohci_hc_driver;
+ 
+ struct exynos_ohci_hcd {
+ 	struct clk *clk;
++	struct device_node *of_node;
+ 	struct phy *phy[PHY_NUMBER];
+ };
+ 
+@@ -170,6 +171,13 @@  static int exynos_ohci_probe(struct platform_device *pdev)
+ 		goto fail_io;
+ 	}
+ 
++	/*
++	 * Workaround: reset of_node pointer to avoid conflict between Exynos
++	 * OHCI port subnodes and generic USB device bindings
++	 */
++	exynos_ohci->of_node = pdev->dev.of_node;
++	pdev->dev.of_node = NULL;
++
+ 	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to add USB HCD\n");
+@@ -180,6 +188,7 @@  static int exynos_ohci_probe(struct platform_device *pdev)
+ 
+ fail_add_hcd:
+ 	exynos_ohci_phy_disable(&pdev->dev);
++	pdev->dev.of_node = exynos_ohci->of_node;
+ fail_io:
+ 	clk_disable_unprepare(exynos_ohci->clk);
+ fail_clk:
+@@ -192,6 +201,8 @@  static int exynos_ohci_remove(struct platform_device *pdev)
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct exynos_ohci_hcd *exynos_ohci = to_exynos_ohci(hcd);
+ 
++	pdev->dev.of_node = exynos_ohci->of_node;
++
+ 	usb_remove_hcd(hcd);
+ 
+ 	exynos_ohci_phy_disable(&pdev->dev);
