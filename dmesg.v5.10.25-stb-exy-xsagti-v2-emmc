@@ -1,0 +1,72 @@
+EMMC 5.10.25-xsaqgti kernel NO BOOT
+
+
+[    4.851619] of_get_named_gpiod_flags: can't parse 'wp-gpio' property of node '/soc/mmc@12550000[0]'
+[    4.851636] dwmmc_exynos 12550000.mmc: using lookup tables for GPIO lookup
+[    4.851646] dwmmc_exynos 12550000.mmc: No GPIO consumer wp found
+[    4.851748] dwmmc_exynos 12550000.mmc: allocated mmc-pwrseq
+[    4.851762] mmc_host mmc1: card is polling.
+[    4.856761] mdio_bus usb-001:002: using lookup tables for GPIO lookup
+[    4.856844] mdio_bus usb-001:002: No GPIO consumer reset found
+[    4.915810] mdio_bus usb-001:002:01: GPIO lookup for consumer reset
+[    4.922218] exynos-ppmu: new PPMU device registered 106b0000.ppmu_dmc1 (ppmu-event3-dmc1)
+[    4.926806] mdio_bus usb-001:002:01: using lookup tables for GPIO lookup
+[    4.932909] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req 400000Hz, actual 396825HZ div = 63)
+[    4.935096] exynos-ppmu: new PPMU device registered 112a0000.ppmu_rightbus (ppmu-event3-rightbus)
+[    4.935746] exynos-ppmu: new PPMU device registered 116a0000.ppmu_leftbus0 (ppmu-event3-leftbus)
+[    4.940915] mdio_bus usb-001:002:01: No GPIO consumer reset found
+[    4.945950] samsung-i2s 3830000.i2s-sec: DMA channels sourced from device 3830000.i2s
+[    4.950495] IPv6: Loaded, but administratively disabled, reboot required to enable
+[    4.954382] libphy: smsc95xx-mdiobus: probed
+[    4.963005] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    4.974196] smsc95xx 1-2:1.0 eth0: register 'smsc95xx' at usb-12580000.ehci-2, smsc95xx USB 2.0 Ethernet, ba:5d:6d:41:68:6f
+[    4.979910] NET: Registered protocol family 17
+[    5.032429] mmc_host mmc1: Bus speed (slot 0) = 50000000Hz (slot req 52000000Hz, actual 50000000HZ div = 0)
+[    5.034400] NET: Registered protocol family 15
+[    5.040098] mmc1: new DDR MMC card at address 0001
+[    5.044967] Key type dns_resolver registered
+[    5.053166] mmcblk1: mmc1:0001 016G92 14.7 GiB
+[    5.057472] Registering SWP/SWPB emulation handler
+[    5.065674] mmcblk1boot0: mmc1:0001 016G92 partition 1 4.00 MiB
+[    5.076434] Loading compiled-in X.509 certificates
+[    5.081811] mmcblk1boot1: mmc1:0001 016G92 partition 2 4.00 MiB
+[    5.090379] zswap: loaded using pool lzo/zbud
+[    5.099527] mmcblk1rpmb: mmc1:0001 016G92 partition 3 512 KiB, chardev (246:0)
+[    5.213038]  mmcblk1: p1 p2 p3
+[    5.246778] exynos-hdmi 12d00000.hdmi: GPIO lookup for consumer hpd
+[    5.247578] exynos-hdmi 12d00000.hdmi: using device tree for GPIO lookup
+[    5.254436] of_get_named_gpiod_flags: parsed 'hpd-gpios' property of node '/soc/hdmi@12d00000[0]' - status (0)
+[    5.265946] OF: graph: no port node found in /soc/hdmi@12d00000
+[    5.274640] [drm] Exynos DRM: using 12c10000.mixer device for DMA mapping operations
+[    5.278270] exynos-drm exynos-drm: bound 12c10000.mixer (ops mixer_component_ops)
+[    5.285550] [drm] forcing HDMI-A-1 connector on
+[    5.290082] exynos-drm exynos-drm: bound 12d00000.hdmi (ops hdmi_component_ops)
+[    5.299601] exynos-drm exynos-drm: [drm] Cannot find any crtc or sizes
+[    5.305961] exynos-drm exynos-drm: [drm] Cannot find any crtc or sizes
+[    5.312169] [drm] Initialized exynos 1.1.0 20180330 for exynos-drm on minor 0
+[    5.323566] exynos-bus: new bus device registered: soc:bus_dmc (100000 KHz ~ 400000 KHz)
+[    5.328713] exynos-bus: new bus device registered: soc:bus_acp (100000 KHz ~ 267000 KHz)
+[    5.335574] exynos-bus: new bus device registered: soc:bus_c2c (100000 KHz ~ 400000 KHz)
+[    5.346583] exynos-bus: new bus device registered: soc:bus_leftbus (100000 KHz ~ 200000 KHz)
+[    5.352174] exynos-bus: new bus device registered: soc:bus_rightbus (100000 KHz ~ 200000 KHz)
+[    5.360929] exynos-bus: new bus device registered: soc:bus_display (160000 KHz ~ 200000 KHz)
+[    5.361458] usb 1-3: new high-speed USB device number 3 using exynos-ehci
+[    5.369401] exynos-bus: new bus device registered: soc:bus_fsys (100000 KHz ~ 134000 KHz)
+[    5.385199] exynos-bus: new bus device registered: soc:bus_peri ( 50000 KHz ~ 100000 KHz)
+[    5.392459] exynos-bus: new bus device registered: soc:bus_mfc (100000 KHz ~ 200000 KHz)
+[    5.443588] max98090 1-0010: MAX98090 REVID=0x43
+[    5.447865] max98090 1-0010: use default 2.8v micbias
+[    5.481222] of_get_named_gpiod_flags: parsed 'gpios' property of node '/gpio_keys/power_key[0]' - status (0)
+[    5.487161] input: gpio_keys as /devices/platform/gpio_keys/input/input0
+[    5.551573] ALSA device list:
+[    5.551778]   #0: Odroid-U3
+[    5.554059] Waiting for root device PARTUUID=7798e841-03...
+[    5.572315] usb 1-3: New USB device found, idVendor=0424, idProduct=3503, bcdDevice=a1.a0
+[    5.575014] usb 1-3: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    5.584573] hub 1-3:1.0: USB hub found
+[    5.586167] hub 1-3:1.0: 3 ports detected
+[    6.393280] exynos-drm exynos-drm: [drm] Cannot find any crtc or sizes
+[    6.395615] exynos-drm exynos-drm: [drm] Cannot find any crtc or sizes
+[    6.531717] hub 1-3:1.0: over-current condition
+[   35.674177] VDD_G3D: disabling
+[  204.872209] random: crng init done
